@@ -14,10 +14,19 @@ import duckdb as dd
 import matplotlib.pyplot as plt
 from sklearn.neighbors import KNeighborsClassifier
 import numpy as np
+from sklearn.model_selection import train_test_split, KFold
+from sklearn.metrics import accuracy_score
+from sklearn import tree
 
 #%% Carga de datos
 carpeta = r'C:\Users\Delfina\Desktop\EXACTAS\LABO_DATOS\tp2'
-df_letras = pd.read_csv(carpeta + '\TP02-EnglishTypeAlphabet.csv')
+df_letras = pd.read_csv(carpeta + r'\TP02-EnglishTypeAlphabet.csv')
+
+#%% Separación de Variables
+# X variable explicativa: para las imagenes son los valores de los pixeles
+# Y variable a explicar: para las clases (la letra)
+X = df_letras.drop("label", axis=1)
+y = df_letras["label"]
 
 #%% Visualización de letra por índice
 
@@ -32,8 +41,7 @@ def visualizar_letra(indice):
     # graficar
     plt.figure(figsize=(4, 4))
     plt.imshow(matriz, cmap='gray')
-    plt.axis('off')
-    # saca los ejes para que se vea mas como una imagen y no tanto como un grafico
+    plt.axis('off') # saca los ejes para que se vea mas como una imagen y no tanto como un grafico
     
     plt.show()
 
