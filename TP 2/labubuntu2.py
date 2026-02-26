@@ -1,51 +1,44 @@
-# Encabezado
 """ 
-Nombre Grupo: Labubuntu
+Laboratorio de Datos - Verano 2026
+
 Integrantes:
-    1
-    2
-    3
+- Lanabere, Delfina Daniela (LU: 246/24)
+- Muhafra, Micaela Abril (LU: 1327/24)
+- Gomez Arreaza, Catherine De Jesus (LU: 980/24)
+
 Datos relevantes:
-    ...
-."""
+"""
+
 #%% Importación de librerias
+
 import pandas as pd
 import duckdb as dd
 import matplotlib.pyplot as plt
 from sklearn.neighbors import KNeighborsClassifier
 import numpy as np
-from sklearn.model_selection import train_test_split, KFold
-from sklearn.metrics import accuracy_score
-from sklearn import tree
 
 #%% Carga de datos
-carpeta = r'C:\Users\Delfina\Desktop\EXACTAS\LABO_DATOS\tp2'
-df_letras = pd.read_csv(carpeta + r'\TP02-EnglishTypeAlphabet.csv')
 
-#%% Separación de Variables
-# X variable explicativa: para las imagenes son los valores de los pixeles
-# Y variable a explicar: para las clases (la letra)
-X = df_letras.drop("label", axis=1)
-y = df_letras["label"]
+carpeta = r'C:\Users\Delfina\Desktop\EXACTAS\LABO_DATOS\tp2'
+df_letras = pd.read_csv(carpeta + '\TP02-EnglishTypeAlphabet.csv')
 
 #%% Visualización de letra por índice
 
 def visualizar_letra(indice):
-    # extraer la fila sacando la columna label
-    # usar .iloc[indice, 1:] para saltar la etiqueta que esta en la columna 0
+    # se extrae de la fila la columna label para luego usar
+    # .iloc[indice, 1:] para saltar la etiqueta que esta en la columna 0
     pixeles = df_letras.iloc[indice, 1:].values
     
-    # redimensionar a 28x28
+    # luego se redimensiona a 28x28
     matriz = pixeles.reshape(28, 28)
     
-    # graficar
     plt.figure(figsize=(4, 4))
     plt.imshow(matriz, cmap='gray')
-    plt.axis('off') # saca los ejes para que se vea mas como una imagen y no tanto como un grafico
+    plt.axis('off')
     
     plt.show()
 
-visualizar_letra(26415)
+visualizar_letra(0)
 
 #%% Ejercicio 1: Análisis exploratorio
 
@@ -70,36 +63,55 @@ print(f"Cant. de muestras por cada clase: {26416/26}")
 # de la variable de interés
 
 
-# Calculamos la varianza de cada píxel (excluyendo la columna label) [cite: 15]
 
-varianzas = df_letras.iloc[:, 1:].var()
+media_pixeles = df_letras.iloc[:, 1:].mean().values.reshape(28, 28)
+plt.figure(figsize=(7, 6))
+# calculamos la media de cada píxel en todo el dataset
+# para ver qué atributos importan más
 
-# Lo convertimos a matriz 28x28 para verlo como imagen [cite: 21]
-mapa_varianza = varianzas.values.reshape(28, 28)
+# Visualizamos la media usando un mapa de color
+im = plt.imshow(media_pixeles, cmap='Blues')
+plt.title("Intensidad Media por Píxel", fontsize=14)
+plt.colorbar(im, label='Nivel de intensidad promedio')
+plt.axis('off')
 
-plt.imshow(mapa_varianza, cmap='hot')
-plt.colorbar(label='Varianza')
-plt.title("Mapa de calor: Relevancia de píxeles por varianza")
 plt.show()
-# los píxeles oscuros (bordes) tienen varianza ~0 
-# y podrían descartarse[cite: 16].
-
-# Análisis de píxeles constantes (Varianza = 0)
-# Los píxeles que nunca cambian no aportan información para clasificar
-pixeles_constantes = (varianzas == 0).sum()
-total_atributos = len(varianzas)
-
-print(f"Píxeles constantes (varianza 0): {pixeles_constantes} de {total_atributos}")
-
-#%% --- representacion grafica
-# img = np.array(df_letras.sample()).reshape((28,28))
-# plt.imshow(img, cmap='gray')
-# plt.show()
-
-#%% --- funciones propias
 
 
-#%% --- código fuera de las funciones
 
+# oObtenemos las letras únicas y las ordenamos
+letras = sorted(df_letras['label'].unique())
+
+plt.figure(figsize=(22, 7))
+
+# Usamos un for para recorrer cada letra
+for i, letra in enumerate(letras):
+    plt.subplot(3, 13, i+1) # Grilla para las 26 letras
+    
+    # Filtramos las filas de esa letra y calculamos la media de cada columna
+    img_promedio = df_letras[df_letras['label'] == letra].iloc[:, 1:].mean().values.reshape(28, 28)
+    
+    plt.imshow(img_promedio, cmap='gray')
+    plt.title(letra)
+    plt.axis('off')
+
+plt.tight_layout()
+plt.suptitle('Imágenes de la media de cada clase', fontsize=25, y=1.02)
+plt.show()
+
+
+
+# Seleccionamos 10 muestras aleatorias de la letra J
+muestras_j = df_letras[df_letras['label'] == 9].sample(10, random_state=42)
+
+plt.figure(figsize=(10, 4))
+for i in range(10):
+    plt.subplot(2, 5, i+1)
+    img = muestras_j.iloc[i, 1:].values.reshape(28, 28)
+    plt.imshow(img, cmap='gray')
+    plt.axis('off')
+
+plt.tight_layout()
+plt.show()
 
 
