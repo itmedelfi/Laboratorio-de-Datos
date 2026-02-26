@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 from sklearn.neighbors import KNeighborsClassifier
 import numpy as np
 from sklearn.model_selection import train_test_split, KFold
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, ConfusionMatrixDisplay
 from sklearn import tree
 from sklearn.metrics import confusion_matrix, classification_report
 import seaborn as sns
