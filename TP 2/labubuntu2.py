@@ -284,11 +284,11 @@ print("Exactitud: ", exactitud_arbol_dev)
 # Armamos la matriz de confusión (Usando la predicción que ya hicimos arriba)
 matriz = confusion_matrix(y_eval, y_pred)
 
-plt.figure(figsize=(14, 14))
+plt.figure(figsize=(10, 10))
 disp = ConfusionMatrixDisplay(confusion_matrix=matriz, display_labels=letras)
 disp.plot(cmap='PuBu', colorbar=False, ax=plt.gca(), values_format='d')
 
-plt.title(f"Matriz de confusión (hmax = {mejor_h}, crit = {mejor_crit})")
+plt.title(f"Matriz de confusión (hmax = {mejor_h}, crit = {mejor_crit})", fontsize = 14)
 plt.xlabel("Letra Predicha", fontsize=12)
 plt.ylabel("Letra Real", fontsize=12)
 plt.xticks(fontsize=10)
