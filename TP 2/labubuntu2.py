@@ -27,6 +27,13 @@ import seaborn as sns
 carpeta = r'C:\Users\Delfina\Desktop\EXACTAS\LABO_DATOS\tp2'
 df_letras = pd.read_csv(carpeta + '\TP02-EnglishTypeAlphabet.csv')
 
+#%% Separación de Variables
+
+# X variable explicativa: para las imagenes son los valores de los pixeles
+# Y variable a explicar: para las clases (la letra)
+X = df_letras.drop("label", axis=1)
+y = df_letras["label"]
+
 #%% Visualización de letra por índice
 
 def visualizar_letra(indice):
