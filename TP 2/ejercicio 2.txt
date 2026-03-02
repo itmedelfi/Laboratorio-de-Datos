@@ -26,9 +26,8 @@ Para algunos de los conjuntos de atributos utilizados en el punto anterior, se v
 
 Al aumentar el k a 5, se observa un comportamiento relativamente estable en la mayoría de las configuraciones. En algunos casos, especialmente cuando los atributos fueron seleccionados mediante el 'Fisher Score', la exactitud mejora levemente sin embargo, no llega a superar el mejor rendimiento que tuvo con k = 3 lo que indica que el problema presenta una separación relativamente clara entre clases.
 
-Al incrementar a k=25, se observa en varias configuraciones una disminución en la exactitud, especialmente cuando se utilizan muchos atributos. Este comportamiento puede explicarse por un fenómeno de sobre-suavización: el modelo comienza a promediar regiones demasiado amplias del espacio de características, perdiendo sensibilidad a la estructura local de los datos.
+Al incrementar a k=25, se observa en varias configuraciones una disminución en la exactitud, especialmente cuando se utilizan muchos atributos. Este comportamiento puede explicarse por un fenómeno de sobre-suavización: el modelo comienza a promediar regiones demasiado amplias del espacio de características, perdiendo sensibilidad a la estructura local de los datos. Sin embargo ocurre una leve mejora en el desempeño cuando se utilizan píxeles del borde, aun cuando el rendimiento de estos siguen siendo bastante inferior al resultado obtenido con métodos más informativos, señalando que esta mejora no se debe a la calidad de los píxeles seleccionados, sino al efecto estabilizador que introduce un valor alto de k.
 
-En consecuencia, aumenta el sesgo del modelo y se reduce ligeramente su capacidad discriminativa.
 
 El mejor desempeño se obtiene con k = 3 y cantidad de atributos = 25, seleccionados mediante Fisher score, lo que sugiere que, una vez reducido el ruido intra-clase a través de una selección de atributos robusta, resulta beneficioso mantener una frontera de decisión local y flexible. Incrementar el número de vecinos introduce una suavización adicional que no aporta mejoras y puede aumentar el sesgo del modelo, produciendo una ligera disminución en la exactitud.
 
