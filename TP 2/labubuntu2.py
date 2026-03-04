@@ -34,24 +34,6 @@ df_letras = pd.read_csv(carpeta + '\TP02-EnglishTypeAlphabet.csv')
 X = df_letras.drop("label", axis=1)
 y = df_letras["label"]
 
-#%% Visualización de letra por índice
-
-def visualizar_letra(indice):
-    # se extrae de la fila la columna label para luego usar
-    # .iloc[indice, 1:] para saltar la etiqueta que esta en la columna 0
-    pixeles = df_letras.iloc[indice, 1:].values
-    
-    # luego se redimensiona a 28x28
-    matriz = pixeles.reshape(28, 28)
-    
-    plt.figure(figsize=(4, 4))
-    plt.imshow(matriz, cmap='gray')
-    plt.axis('off')
-    
-    plt.show()
-
-visualizar_letra(0)
-
 #%% Ejercicio 1: Análisis exploratorio
 
 # Cantidad de datos y atributos
