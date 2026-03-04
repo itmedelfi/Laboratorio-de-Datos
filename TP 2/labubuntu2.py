@@ -70,7 +70,7 @@ plt.show()
 
 
 
-# oObtenemos las letras únicas y las ordenamos
+# Obtenemos las letras únicas y las ordenamos
 letras = sorted(df_letras['label'].unique())
 
 plt.figure(figsize=(22, 7))
@@ -303,15 +303,18 @@ X_dev, X_eval, y_dev, y_eval = train_test_split(
         X,y, test_size = 0.15, stratify = y, random_state = 42)
 
 #%% 3.b1 Ajustar un modelo de árbol de decisión (Profundidad 1 a 20 salteado)
-profs_1 = [1, 3, 5, 8, 11, 14, 17, 20]
+profs_1 = [1, 4, 9, 13, 17, 20]
 s_train_1, s_test_1 = experimentar_profundidad(X_dev, y_dev, profs_1)
 graficar_resultados(profs_1, s_train_1, s_test_1, "3.b: Precisión del arbol de desiciones segun nodos")
 
-#%% 3.b2 Detalle del modelo entre nodos 11 y 17
+#%% 3.b2 Detalle del modelo entre nodos 9 y 17
 
-profs_2 = np.arange(11, 18)
+profs_2 = np.arange(9, 18)
 s_train_2, s_test_2 = experimentar_profundidad(X_dev, y_dev, profs_2)
-graficar_resultados(profs_2, s_train_2, s_test_2, "3.b: Detalle en alturas medias (11 a 17)")
+graficar_resultados(profs_2, s_train_2, s_test_2, "3.b: Detalle en alturas medias (9 a 17)")
+
+#Guardamos la mejor altura (leer el informe para más información)
+mejor_altura = 11
 
 # %% 3.c Experimento y comparación de árboles
 #Los hiperparámetros a evaluar son el los criterios de las medidas de impureza y las profundidades maximas
@@ -325,17 +328,17 @@ kf = KFold(n_splits=nsplits)
 # Diccionario para guardar resultados de cada criterio
 resultados = {crit: np.zeros((nsplits, len(profundidades_3c))) for crit in criterios}
 
+# para cada criterio
 for crit in criterios:
     print(f"Evaluando criterio: {crit}...")
-    #para cada fold
+    # para cada fold
     for i, (train_index, test_index) in enumerate(kf.split(X_dev)):
-        print(f"  - Procesando Fold {i+1}/{nsplits}")
     
         # Separamos los datos para train y test
         kf_X_train, kf_X_test = X_dev.iloc[train_index], X_dev.iloc[test_index]
         kf_y_train, kf_y_test = y_dev.iloc[train_index], y_dev.iloc[test_index]
     
-        #para cada altura
+        # para cada altura
         for j, d in enumerate(profundidades_3c):
             # Para cada rpofundidad entrenamos el modelo con los datos "train" y lo probamos con los de "test"
             # Creamos el árbol con la combinación actual de hiperparámetros
@@ -359,12 +362,12 @@ else:
     mejor_crit = 'entropy'
     mejor_h = profundidades_3c[np.argmax(promedios_entropy)]
     mejor_score = np.max(promedios_entropy)
-
+#%%
 # Imprimimos todos los resultados
 print(f"Mejor configuración: Criterio = {mejor_crit}, Profundidad = {mejor_h}")
 print(f"Performance promedio en CV: {mejor_score:.4f}")
 
-#%% 3.c Gráfico
+#%% 3.c
 
 # Graficamos la línea de Gini
 plt.plot(profundidades_3c, promedios_gini * 100, label='Criterio: Gini', 
@@ -385,8 +388,8 @@ plt.legend()
 plt.show()
 
 # %% 3.d Entrenamos el modelo elegido en el conjunto dev entero
-mejor_criterio = mejor_crit  # La variable que definimos en el paso anterior
-mejor_profundidad = mejor_h
+mejor_criterio = mejor_crit         # La mejor medida de impureza
+mejor_profundidad = mejor_altura    # La mejor profundidad
 
 arbol_elegido = tree.DecisionTreeClassifier(
     criterion=mejor_criterio, 
@@ -399,20 +402,55 @@ arbol_elegido.fit(X_dev, y_dev)
 #Predecimos sobre el conjunto Held-Out separado en el punto 3.a
 y_pred = arbol_elegido.predict(X_eval)
 
-# Cálculo de Performance Final
+# Evaluación Final
 exactitud_arbol_dev = accuracy_score(y_eval, y_pred)
-print("Exactitud: ", exactitud_arbol_dev)
+print("Exactitud: ", exactitud_arbol_dev*100)
 
-#%% Armado de matriz de confusión
-# Usando la predicción que ya hicimos arriba)
+# %% 
+# Armamos la matriz de confusión (Usando la predicción que ya hicimos arriba)
 matriz = confusion_matrix(y_eval, y_pred)
 
 plt.figure(figsize=(10, 10))
 disp = ConfusionMatrixDisplay(confusion_matrix=matriz, display_labels=letras)
 disp.plot(cmap='PuBu', colorbar=False, ax=plt.gca(), values_format='d')
 
-plt.title(f"Matriz de confusión (hmax = {mejor_h}, crit = {mejor_crit})", fontsize = 14)
+plt.title(f"Matriz de confusión (hmax = {mejor_altura}, crit = {mejor_crit})", fontsize = 14)
 plt.xlabel("Letra Predicha", fontsize=12)
 plt.ylabel("Letra Real", fontsize=12)
 plt.xticks(fontsize=10)
 plt.yticks(fontsize=10)
+
+#%%
+#Identificamos los extremos (letras con mejor y peor performance)
+aciertos_por_letra = matriz.diagonal()
+
+# Letra con más aciertos
+idx_max = np.argmax(aciertos_por_letra)
+letra_max = letras[idx_max]
+cant_max = aciertos_por_letra[idx_max]
+
+# Letra con menos aciertos
+idx_min = np.argmin(aciertos_por_letra)
+letra_min = letras[idx_min]
+cant_min = aciertos_por_letra[idx_min]
+
+print(f"Letra con MÁS aciertos: {letra_max} ({cant_max})")
+print(f"Letra con MENOS aciertos: {letra_min} ({cant_min})")
+
+#%%
+# Identificamos los pixeles mas importantes para la toma de decisiones en un vector de 784 elementos
+importancias = (arbol_elegido.feature_importances_)*100
+
+#armamos la matriz de 28x28 desde el vector
+importancia_imagen = importancias.reshape(28, 28)
+
+#Graficamos el mapa de color
+plt.figure(figsize=(8, 6))
+plt.imshow(importancia_imagen, cmap='YlOrRd', interpolation='nearest')
+
+# Detalles del gráfico
+plt.colorbar(label='Grado de Importancia de los píxeles')
+plt.title("Píxeles Críticos para la Decisión", fontsize=14)
+plt.axis('off') # Quitamos los ejes porque representan la forma de la letra
+plt.show()
+
