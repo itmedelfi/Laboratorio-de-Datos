@@ -169,18 +169,18 @@ diferencia = media_L - media_O
 S = (media_L - media_O)**2 / (var_L + var_O)
 
 # Creamos distintas listas de indices para utilizar en el training del modelo y comparar sus resultados entre sí.
-top3_dif = diferencia.abs().sort_values(ascending=False).index[:3].tolist()
+top2_dif = diferencia.abs().sort_values(ascending=False).index[:2].tolist()
 top6_dif = diferencia.abs().sort_values(ascending=False).index[:6].tolist()
 top12_dif = diferencia.abs().sort_values(ascending=False).index[:12].tolist()
-top18_dif = diferencia.abs().sort_values(ascending=False).index[:18].tolist()
 top25_dif = diferencia.abs().sort_values(ascending=False).index[:25].tolist()
-top3_fs = S.sort_values(ascending=False).index[:3].tolist()
+top65_dif = diferencia.abs().sort_values(ascending=False).index[:65].tolist()
+top2_fs = S.sort_values(ascending=False).index[:2].tolist()
 top6_fs = S.sort_values(ascending=False).index[:6].tolist()
 top12_fs = S.sort_values(ascending=False).index[:12].tolist()
-top18_fs = S.sort_values(ascending=False).index[:18].tolist()
 top25_fs = S.sort_values(ascending=False).index[:25].tolist()
+top65_fs = S.sort_values(ascending=False).index[:65].tolist()
 numeros_azar = np.random.choice(range(784), size=6, replace=False)
-columnas_azar3 = X_train.columns[numeros_azar[:3]].tolist()
+columnas_azar2 = X_train.columns[numeros_azar[:2]].tolist()
 columnas_azar6 = X_train.columns[numeros_azar[:6]].tolist()
 
 # Función para entrenar el modelo, que tiene como entrada los atributos y el k a utilizar y de salida, la exactitud.
@@ -202,10 +202,10 @@ resultados = []
 
 # Lista con las distintias configuraciones que vamos a usar para entrenar el modelo.
 configuraciones = [
-    ("diferencia_media", 3, top3_dif),
-    ("azar", 3, columnas_azar3),
-    ("fisher_score", 3, top3_fs),
-    ("borde", 3, ['pixel 0', 'pixel 1', 'pixel 2']),
+    ("diferencia_media", 2, top2_dif),
+    ("azar", 2, columnas_azar2),
+    ("fisher_score", 2, top2_fs),
+    ("borde", 2, ['pixel 0', 'pixel 1']),
     
     ("diferencia_media", 6, top6_dif),
     ("azar", 6, columnas_azar6),
@@ -214,12 +214,13 @@ configuraciones = [
     
     ("diferencia_media", 12, top12_dif),
     ("fisher_score", 12, top12_fs),
-    
-    ("diferencia_media", 18 , top18_dif),
-    ("fisher_score", 18, top18_fs),
-    
+        
     ("diferencia_media", 25, top25_dif),
     ("fisher_score", 25, top25_fs),
+    
+    ("diferencia_media", 65, top65_dif),
+    ("fisher_score", 65, top65_fs),
+
 ]
 
 valores_k = [2, 5, 35]
