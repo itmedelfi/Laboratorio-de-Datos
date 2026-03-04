@@ -1,31 +1,49 @@
-Clasificación binaria
-
+\subsection{Clasificación Binaria}
 El objetivo de esta sección consiste en determinar, a partir de una imagen, si la misma corresponde a la letra 'O' o a la letra 'L'.
-
-A partir del DataFrame original se construyó un subconjunto que contiene únicamente las imágenes correspondientes a estas dos clases. Dicho subconjunto se encuentra balanceado, ya que ambas letras poseen la misma cantidad de observaciones. Posteriormente, los datos fueron divididos aleatoriamente en un conjunto de entrenamiento (80%) y un conjunto de prueba (20%).
-
+A partir del DataFrame original se construyó un subconjunto que contiene únicamente las imágenes correspondientes a estas dos clases. Dicho subconjunto se encuentra balanceado, ya que ambas letras poseen la misma cantidad de observaciones. Posteriormente, los datos fueron divididos aleatoriamente en un conjunto de entrenamiento (80\%) y un conjunto de prueba (20\%).
 Sobre el conjunto de entrenamiento se ajustó un modelo de K-Nearest Neighbors (KNN) con k = 2. La selección de atributos se realizó a partir de los siguientes criterios:
-
-Diferencia de medias: se seleccionaron los píxeles que presentan mayor diferencia absoluta entre las medias de ambas letras.
-
-Fisher score: se eligieron los píxeles con el mayor valor de 'Fisher Score', que favorece atributos con alta separación entre-clases y baja variabilidad intra-clase.
-
-Selección aleatoria: se escogieron píxeles al azar como referencia comparativa.
-
-Píxeles del borde: se seleccionaron píxeles ubicados en los bordes de la imagen, que según el análisis exploratorio previo aportaban escasa información discriminativa.
-
+\begin{itemize}
+    \item \textbf{Diferencia de medias}: Se seleccionaron los píxeles que presentan mayor diferencia absoluta entre las medias de ambas letras.
+    \item \textbf{Fisher score}: Se eligieron los píxeles con el mayor valor de 'Fisher Score', que favorece atributos con alta separación entre-clases y baja variabilidad intra-clase.
+    \item \textbf{Selección aleatoria}: Se escogieron píxeles al azar.
+    \item \textbf{Píxeles del borde}: se seleccionaron píxeles ubicados en los bordes de la imagen, que según el análisis exploratorio previo aportaban escasa información discriminativa.
+\end{itemize}
 Como métrica de evaluación se utilizó la exactitud (accuracy), que mide la proporción de predicciones correctas sobre el total de observaciones. Dado que el conjunto de datos está balanceado, esta métrica resulta adecuada y representativa para el objetivo del modelo.
 
-Los resultados muestran que, al utilizar una cantidad reducida de atributos, el criterio basado en 'Fisher Score' tiende a obtener el mejor desempeño. En estos casos, seleccionar variables que maximicen la separación entre clases y, al mismo tiempo, controlen la variabilidad intra-clase permite alcanzar una exactitud elevada incluso en baja dimensión. El criterio de diferencia de medias presenta un rendimiento muy cercano, aunque levemente inferior en esta situación.
+Los resultados ilustrados en la figura 4 muestran que, al utilizar una cantidad reducida de atributos, el criterio basado en 'Fisher Score' tiende a obtener el mejor desempeño. En estos casos, seleccionar variables que maximicen la separación entre clases y, al mismo tiempo, controlen la variabilidad intra-clase permite alcanzar una exactitud elevada incluso en baja dimensión. El criterio de diferencia de medias presenta un rendimiento muy cercano, aunque levemente inferior.
 
 Por otro lado, se observa que los píxeles ubicados en los bordes presentan los peores desempeños. Esto confirma que dichas regiones no contienen información relevante para diferenciar las letras. La selección aleatoria de atributos mejora considerablemente estos resultados, lo que indica que, incluso sin criterio específico, muchos píxeles contienen información útil.
 
 Al aumentar la cantidad de atributos, las diferencias entre los criterios se reducen. Tanto diferencia de medias como 'Fisher Score' alcanzan desempeños muy altos y similares. Esto sugiere que, al incorporar una mayor cantidad de píxeles informativos, el modelo logra capturar de manera más completa la estructura discriminativa del problema, independientemente del criterio específico utilizado para seleccionarlos.
 
-Para algunos de los conjuntos de atributos utilizados en el punto anterior, se volvió a ajustar el modelo KNN, incrementando el valor de k específicamente a k = 5 y k = 35, con el objetivo de analizar cómo afecta este parámetro al rendimiento del modelo.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=7cm]{KNN1.png}
+    \caption{Exactitud de KNN en función de la cantidad de atributos (k = 2)}
+\end{figure}
+Para algunos de los conjuntos de atributos utilizados en el punto anterior, se volvió a ajustar el modelo KNN, incrementando el valor de k específicamente a k = 5 y k = 35 como se puede ver en la figura 5, con el objetivo de analizar cómo afecta este parámetro al rendimiento del modelo.
 
-Al aumentar el k a 5, se observa un comportamiento relativamente estable en la mayoría de las configuraciones; sin embargo, puede notarse una ligera disminución en la exactitud que, al incrementar k a 35, se vuelve aún más evidente, especialmente cuando se utilizan muchos atributos. El modelo comienza a promediar regiones demasiado amplias del espacio, perdiendo sensibilidad a la estructura local de los datos.
+Al aumentar el k a 5 se observa un comportamiento relativamente estable en la mayoría de las configuraciones, sin embargo, puede notarse una ligera disminución en la exactitud que, al incrementar k a 35, se vuelve aún más evidente, especialmente cuando se utilizan muchos atributos. El modelo comienza a promediar regiones demasiado amplias del espacio, perdiendo sensibilidad a la estructura local de los datos.
+\begin{figure}[h]
+    \centering
+    
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{KNN2.png}
+        \caption{k = 2}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{KNN3.png}
+        \caption{k = 5}
+    \end{subfigure}
+    
+    \caption{Exactitud de KNN en función a la cantidad de atributos (k = 5 y k = 35).}
+\end{figure}
 
 El peor desempeño se observa constantemente con los píxeles del borde, debajo de los seleccionados aleatoriamente, señalando la poca información aportada por estos, y como en general, la información discriminativa no se encuentra concentrada únicamente en unas pocas posiciones específicas, sino que está distribuida en distintas regiones de la imagen.
+
+El mejor desempeño se obtiene con k = 2 y cantidad de atributos = 65, seleccionados bajo los criterios basados en diferencia de medias o 'Fisher Score', que alcanzan valores prácticamente idénticos y cercanos al máximo observado.Esto indica que, en este problema particular, la estructura de las clases presenta una separación suficientemente clara a nivel local, por lo que un valor pequeño de k resulta más adecuado para dicha estructura sin introducir un exceso de suavización en la frontera de decisión.
 
 El mejor desempeño se obtiene con k = 2 y cantidad de atributos = 65, seleccionados bajo los criterios basados en diferencia de medias y Fisher Score, que alcanzan valores prácticamente idénticos y cercanos al máximo observado.Esto indica que, en este problema particular, la estructura de las clases presenta una separación suficientemente clara a nivel local, por lo que un valor pequeño de k resulta más adecuado para explotar dicha estructura sin introducir un exceso de suavización en la frontera de decisión.
