@@ -5,26 +5,22 @@ Integrantes:
 - Lanabere, Delfina Daniela (LU: 246/24)
 - Muhafra, Micaela Abril (LU: 1327/24)
 - Gomez Arreaza, Catherine De Jesus (LU: 980/24)
-
-Datos relevantes:
 """
 
 #%% Importación de librerias
 
 import pandas as pd
-import duckdb as dd
 import matplotlib.pyplot as plt
 from sklearn.neighbors import KNeighborsClassifier
 import numpy as np
 from sklearn.model_selection import train_test_split, KFold
-from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, ConfusionMatrixDisplay
+from sklearn.metrics import accuracy_score, confusion_matrix, ConfusionMatrixDisplay
 from sklearn import tree
-from sklearn.metrics import confusion_matrix, classification_report
-import seaborn as sns
 
 #%% Carga de datos
 
-carpeta = r'C:\Users\Delfina\Desktop\EXACTAS\LABO_DATOS\tp2'
+# directorio donde se encuentra el csv del alfabeto
+carpeta = r'C:\Users\~'
 df_letras = pd.read_csv(carpeta + '\TP02-EnglishTypeAlphabet.csv')
 
 #%% Separación de Variables
@@ -33,6 +29,7 @@ df_letras = pd.read_csv(carpeta + '\TP02-EnglishTypeAlphabet.csv')
 # Y variable a explicar: para las clases (la letra)
 X = df_letras.drop("label", axis=1)
 y = df_letras["label"]
+
 
 #%% Ejercicio 1: Análisis exploratorio
 
@@ -254,9 +251,7 @@ for k_val in valores_k:
     plt.grid(True)
     plt.show()
 
-#%% --------------------------------------------------------------------------------------
-# Clasificación multiclase (EJ: 3)
-# ----------------------------------------------------------------------------------------
+#%% Ejercicio 3: Clasificación multiclase
 # Dada una imagen se desea responder la siguiente pregunta: ¿A cuál de las clases corresponde la imagen?   
 
 #%% Funciones auxiliares del punto 3
@@ -407,8 +402,9 @@ y_pred = arbol_elegido.predict(X_eval)
 # Cálculo de Performance Final
 exactitud_arbol_dev = accuracy_score(y_eval, y_pred)
 print("Exactitud: ", exactitud_arbol_dev)
-# %%
-# Armamos la matriz de confusión (Usando la predicción que ya hicimos arriba)
+
+#%% Armado de matriz de confusión
+# Usando la predicción que ya hicimos arriba)
 matriz = confusion_matrix(y_eval, y_pred)
 
 plt.figure(figsize=(10, 10))
@@ -420,5 +416,3 @@ plt.xlabel("Letra Predicha", fontsize=12)
 plt.ylabel("Letra Real", fontsize=12)
 plt.xticks(fontsize=10)
 plt.yticks(fontsize=10)
-
-
