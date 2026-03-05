@@ -1,0 +1,101 @@
+Sexo,Grupo etario,Descripción,Total de muertes,Frecuencia
+F,0-14,Afecciones originadas en el periodo perinatal ,28507.0,5 más frecuentes
+F,0-14,"Malformaciones congénitas, deformidades y anomalías cromosómicas ",18550.0,5 más frecuentes
+F,0-14,Accidentes y causas externas,8130.0,5 más frecuentes
+F,0-14,Enfermedades del aparato respiratorio,6731.0,5 más frecuentes
+F,0-14,"Síntomas, signos y hallazgos anormales clínicos y de laboratorio, no clasificados en otra parte",4472.0,5 más frecuentes
+F,0-14,Enfermedades del sistema osteomuscular y del tejido conjuntivo,171.0,5 menos frecuentes
+F,0-14,COVID-19,160.0,5 menos frecuentes
+F,0-14,Enfermedades de la piel y del tejido subcutáneo ,47.0,5 menos frecuentes
+F,0-14,"Embarazo, parto y puerperio ",34.0,5 menos frecuentes
+F,0-14,Trastornos mentales,30.0,5 menos frecuentes
+M,0-14,Afecciones originadas en el periodo perinatal ,39028.0,5 más frecuentes
+M,0-14,"Malformaciones congénitas, deformidades y anomalías cromosómicas ",21102.0,5 más frecuentes
+M,0-14,Accidentes y causas externas,12636.0,5 más frecuentes
+M,0-14,Enfermedades del aparato respiratorio,8116.0,5 más frecuentes
+M,0-14,"Síntomas, signos y hallazgos anormales clínicos y de laboratorio, no clasificados en otra parte",5965.0,5 más frecuentes
+M,0-14,Enfermedades del sistema genitourinario ,415.0,5 menos frecuentes
+M,0-14,COVID-19,154.0,5 menos frecuentes
+M,0-14,Enfermedades del sistema osteomuscular y del tejido conjuntivo,114.0,5 menos frecuentes
+M,0-14,Enfermedades de la piel y del tejido subcutáneo ,56.0,5 menos frecuentes
+M,0-14,Trastornos mentales,15.0,5 menos frecuentes
+F,15-34,Accidentes y causas externas,21056.0,5 más frecuentes
+F,15-34,Tumores ,12495.0,5 más frecuentes
+F,15-34,Enfermedades del aparato respiratorio,5973.0,5 más frecuentes
+F,15-34,Enfermedades del aparato circulatorio,5971.0,5 más frecuentes
+F,15-34,Enfermedades infecciosas y parasitarias ,4522.0,5 más frecuentes
+F,15-34,Enfermedades del sistema osteomuscular y del tejido conjuntivo,1007.0,5 menos frecuentes
+F,15-34,"Malformaciones congénitas, deformidades y anomalías cromosómicas ",720.0,5 menos frecuentes
+F,15-34,"Enfermedades de la sangre y de los órganos hematopoyéticos, y ciertos trastornos que afectan al mecanismo de la inmunidad ",530.0,5 menos frecuentes
+F,15-34,Enfermedades de la piel y del tejido subcutáneo ,266.0,5 menos frecuentes
+F,15-34,Trastornos mentales,133.0,5 menos frecuentes
+M,15-34,Accidentes y causas externas,104584.0,5 más frecuentes
+M,15-34,Tumores ,12593.0,5 más frecuentes
+M,15-34,Enfermedades del aparato circulatorio,9898.0,5 más frecuentes
+M,15-34,Enfermedades del aparato respiratorio,8769.0,5 más frecuentes
+M,15-34,Enfermedades infecciosas y parasitarias ,7421.0,5 más frecuentes
+M,15-34,"Malformaciones congénitas, deformidades y anomalías cromosómicas ",920.0,5 menos frecuentes
+M,15-34,"Enfermedades de la sangre y de los órganos hematopoyéticos, y ciertos trastornos que afectan al mecanismo de la inmunidad ",553.0,5 menos frecuentes
+M,15-34,Trastornos mentales,381.0,5 menos frecuentes
+M,15-34,Enfermedades del sistema osteomuscular y del tejido conjuntivo,340.0,5 menos frecuentes
+M,15-34,Enfermedades de la piel y del tejido subcutáneo ,270.0,5 menos frecuentes
+F,35-54,Tumores ,80120.0,5 más frecuentes
+F,35-54,Enfermedades del aparato circulatorio,33237.0,5 más frecuentes
+F,35-54,Enfermedades del aparato respiratorio,18045.0,5 más frecuentes
+F,35-54,Accidentes y causas externas,15180.0,5 más frecuentes
+F,35-54,Enfermedades infecciosas y parasitarias ,12028.0,5 más frecuentes
+F,35-54,"Embarazo, parto y puerperio ",1587.0,5 menos frecuentes
+F,35-54,"Enfermedades de la sangre y de los órganos hematopoyéticos, y ciertos trastornos que afectan al mecanismo de la inmunidad ",1103.0,5 menos frecuentes
+F,35-54,Enfermedades de la piel y del tejido subcutáneo ,868.0,5 menos frecuentes
+F,35-54,"Malformaciones congénitas, deformidades y anomalías cromosómicas ",464.0,5 menos frecuentes
+F,35-54,Trastornos mentales,444.0,5 menos frecuentes
+M,35-54,Enfermedades del aparato circulatorio,73198.0,5 más frecuentes
+M,35-54,Accidentes y causas externas,62396.0,5 más frecuentes
+M,35-54,Tumores ,61221.0,5 más frecuentes
+M,35-54,Enfermedades del aparato respiratorio,28725.0,5 más frecuentes
+M,35-54,Enfermedades del aparato digestivo,27823.0,5 más frecuentes
+M,35-54,Trastornos mentales,2999.0,5 menos frecuentes
+M,35-54,"Enfermedades de la sangre y de los órganos hematopoyéticos, y ciertos trastornos que afectan al mecanismo de la inmunidad ",1055.0,5 menos frecuentes
+M,35-54,Enfermedades de la piel y del tejido subcutáneo ,1024.0,5 menos frecuentes
+M,35-54,Enfermedades del sistema osteomuscular y del tejido conjuntivo,822.0,5 menos frecuentes
+M,35-54,"Malformaciones congénitas, deformidades y anomalías cromosómicas ",444.0,5 menos frecuentes
+F,55-74,Tumores ,226138.0,5 más frecuentes
+F,55-74,Enfermedades del aparato circulatorio,181409.0,5 más frecuentes
+F,55-74,Enfermedades del aparato respiratorio,97193.0,5 más frecuentes
+F,55-74,"Síntomas, signos y hallazgos anormales clínicos y de laboratorio, no clasificados en otra parte",44702.0,5 más frecuentes
+F,55-74,"Enfermedades endocrinas, nutricionales y metabólicas ",35404.0,5 más frecuentes
+F,55-74,Enfermedades de la piel y del tejido subcutáneo ,3911.0,5 menos frecuentes
+F,55-74,"Enfermedades de la sangre y de los órganos hematopoyéticos, y ciertos trastornos que afectan al mecanismo de la inmunidad ",3006.0,5 menos frecuentes
+F,55-74,Trastornos mentales,2372.0,5 menos frecuentes
+F,55-74,"Malformaciones congénitas, deformidades y anomalías cromosómicas ",405.0,5 menos frecuentes
+F,55-74,"Embarazo, parto y puerperio ",2.0,5 menos frecuentes
+M,55-74,Enfermedades del aparato circulatorio,338776.0,5 más frecuentes
+M,55-74,Tumores ,293194.0,5 más frecuentes
+M,55-74,Enfermedades del aparato respiratorio,154466.0,5 más frecuentes
+M,55-74,"Síntomas, signos y hallazgos anormales clínicos y de laboratorio, no clasificados en otra parte",80906.0,5 más frecuentes
+M,55-74,Enfermedades del aparato digestivo,73142.0,5 más frecuentes
+M,55-74,Trastornos mentales,6665.0,5 menos frecuentes
+M,55-74,Enfermedades de la piel y del tejido subcutáneo ,4569.0,5 menos frecuentes
+M,55-74,"Enfermedades de la sangre y de los órganos hematopoyéticos, y ciertos trastornos que afectan al mecanismo de la inmunidad ",3092.0,5 menos frecuentes
+M,55-74,Enfermedades del sistema osteomuscular y del tejido conjuntivo,2293.0,5 menos frecuentes
+M,55-74,"Malformaciones congénitas, deformidades y anomalías cromosómicas ",410.0,5 menos frecuentes
+F,75+,Enfermedades del aparato circulatorio,646627.0,5 más frecuentes
+F,75+,Enfermedades del aparato respiratorio,368389.0,5 más frecuentes
+F,75+,Tumores ,209443.0,5 más frecuentes
+F,75+,"Síntomas, signos y hallazgos anormales clínicos y de laboratorio, no clasificados en otra parte",149125.0,5 más frecuentes
+F,75+,Enfermedades infecciosas y parasitarias ,74167.0,5 más frecuentes
+F,75+,Trastornos mentales,23021.0,5 menos frecuentes
+F,75+,Enfermedades de la piel y del tejido subcutáneo ,16621.0,5 menos frecuentes
+F,75+,"Enfermedades de la sangre y de los órganos hematopoyéticos, y ciertos trastornos que afectan al mecanismo de la inmunidad ",7625.0,5 menos frecuentes
+F,75+,Enfermedades del sistema osteomuscular y del tejido conjuntivo,4967.0,5 menos frecuentes
+F,75+,"Malformaciones congénitas, deformidades y anomalías cromosómicas ",226.0,5 menos frecuentes
+M,75+,Enfermedades del aparato circulatorio,432452.0,5 más frecuentes
+M,75+,Enfermedades del aparato respiratorio,274681.0,5 más frecuentes
+M,75+,Tumores ,211741.0,5 más frecuentes
+M,75+,"Síntomas, signos y hallazgos anormales clínicos y de laboratorio, no clasificados en otra parte",100504.0,5 más frecuentes
+M,75+,Enfermedades del sistema genitourinario ,58128.0,5 más frecuentes
+M,75+,Trastornos mentales,10816.0,5 menos frecuentes
+M,75+,Enfermedades de la piel y del tejido subcutáneo ,7115.0,5 menos frecuentes
+M,75+,"Enfermedades de la sangre y de los órganos hematopoyéticos, y ciertos trastornos que afectan al mecanismo de la inmunidad ",4692.0,5 menos frecuentes
+M,75+,Enfermedades del sistema osteomuscular y del tejido conjuntivo,1962.0,5 menos frecuentes
+M,75+,"Malformaciones congénitas, deformidades y anomalías cromosómicas ",166.0,5 menos frecuentes
