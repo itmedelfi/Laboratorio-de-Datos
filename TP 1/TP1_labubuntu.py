@@ -40,7 +40,7 @@ import seaborn as sns
 
 # Carga de archivos.
 
-carpeta = '~/TablasOriginales'
+carpeta = '/home/Estudiante/Descargas/Archivos importantes/TablasOriginales'
 # cargar directorio donde se encuentran las tablas originales
 
 censo2010               = pd.read_excel(carpeta + "/censo2010.xlsX", skiprows=14)
@@ -207,7 +207,7 @@ consultaSQL = """
                     GROUP BY c.categorias, d.grupo_edad, d.Sexo, d.anio, d.jurisdiccion_de_residencia_id;
             """
 
-df_defunciones = dd.sql(consultaSQL).df()
+df_defunciones = dd.query(consultaSQL).df()
 df_defunciones.to_csv("df_defunciones.csv", index = False)
 
 #%% Tabla de provincias
@@ -223,7 +223,7 @@ consultaSQL = """
                 ORDER BY id;
               """
             
-df_provincias = dd.sql(consultaSQL).df()
+df_provincias = dd.query(consultaSQL).df()
 df_provincias.to_csv("df_provincias.csv", index = False)
 
 #%% Tabla de departamentos
@@ -237,22 +237,24 @@ df_provincias.to_csv("df_provincias.csv", index = False)
 
 consultaSQL = """
                 SELECT DISTINCT 
-                    CASE 
-                        WHEN departamento_nombre = 'ZAPALA' AND provincia_id = '58'  THEN 112
-                        WHEN departamento_nombre = 'QUILMES' AND provincia_id = '6' THEN 658
-                        WHEN departamento_nombre = 'COMUNA 1' AND provincia_id = '2' THEN 1
-                        ELSE departamento_id
-                        END AS "Departamento ID",
+                    CONCAT(
+                        CASE
+                            WHEN departamento_nombre = 'ZAPALA' AND provincia_id = '58'  THEN 112
+                            WHEN departamento_nombre = 'QUILMES' AND provincia_id = '6' THEN 658
+                            WHEN departamento_nombre = 'COMUNA 1' AND provincia_id = '2' THEN 1
+                            ELSE departamento_id
+                            END,
+                            provincia_id
+                        ) AS "Departamento ID",
                         departamento_nombre AS Nombre, provincia_id AS "Provincia ID"
                 FROM instituciones_de_salud;
               """
             
-df_departamentos = dd.sql(consultaSQL).df()
+df_departamentos = dd.query(consultaSQL).df()
 
 df_departamentos["Nombre"] = df_departamentos["Nombre"].str.title()
     
 df_departamentos.to_csv("df_departamentos.csv", index = False)
-
 #%% Tabla de habitantes 
 
 # Creamos el dataframe df_habitantes con los habitantes agregados por: año del censo en el que fueron registrados, 
@@ -330,7 +332,7 @@ consultaSQL = """
                 ON LOWER(TRIM(c.provincia)) = LOWER(TRIM(p.nombre));
             """
 
-df_habitantes = dd.sql(consultaSQL).df()
+df_habitantes = dd.query(consultaSQL).df()
 df_habitantes.to_csv("df_habitantes.csv", index = False)
 
 #%% Tabla de establecimientos_medicos
@@ -343,8 +345,17 @@ df_habitantes.to_csv("df_habitantes.csv", index = False)
 
 consultaSQL = """
                 SELECT DISTINCT 
-                    establecimiento_id AS ID, establecimiento_nombre AS Nombre, 
-                    departamento_id AS "Departamento ID", origen_financiamiento AS Financiamiento,
+                    establecimiento_id AS ID, establecimiento_nombre AS Nombre,
+                    CONCAT(
+                        CASE
+                            WHEN departamento_nombre = 'ZAPALA' AND provincia_id = '58'  THEN 112
+                            WHEN departamento_nombre = 'QUILMES' AND provincia_id = '6' THEN 658
+                            WHEN departamento_nombre = 'COMUNA 1' AND provincia_id = '2' THEN 1
+                            ELSE departamento_id
+                            END,
+                            provincia_id
+                        ) AS "Departamento ID",
+                    origen_financiamiento AS Financiamiento,
                     CASE 
                         WHEN LOWER(tipologia_nombre) LIKE '%terapia intensiva%' THEN 'Sí'
                         ELSE 'No'
@@ -352,10 +363,9 @@ consultaSQL = """
                 FROM instituciones_de_salud;
             """
 
-df_establecimientos_medicos = dd.sql(consultaSQL).df()
+df_establecimientos_medicos = dd.query(consultaSQL).df()
 df_establecimientos_medicos["Nombre"] = df_establecimientos_medicos["Nombre"].str.title()
 df_establecimientos_medicos.to_csv("df_establecimientos_medicos.csv", index = False)
-
 #%% Tabla provincia_x_habitantes
 
 # Tabla provincia_x_habitantes igual a la tabla habitantes solo que en vez del ID de la provincia tiene el nombre.
@@ -402,6 +412,7 @@ consulta_i = """
             """
 
 reporte_i = dd.query(consulta_i).df()
+reporte_i.to_csv("reporte_i.csv", index = False)
 
 #%% REPORTE ii
 
@@ -436,6 +447,7 @@ consulta_ii = """
 
 
 reporte_ii = dd.query(consulta_ii).df()
+reporte_ii.to_csv("reporte_ii.csv", index = False)
 
 #%% REPORTE iii
 
@@ -476,6 +488,7 @@ consulta_iii = """
             """
 
 reporte_iii = dd.query(consulta_iii).df()
+reporte_iii.to_csv("reporte_iii.csv", index = False)
 
 #%% REPORTE iv
 
@@ -519,6 +532,7 @@ consulta_iv = """
 
 
 reporte_iv = dd.query(consulta_iv).df()
+reporte_iv.to_csv("reporte_iv.csv", index = False)
 
 #%% REPORTE v
 
@@ -539,6 +553,7 @@ consulta_v = """
 
 
 reporte_v = dd.query(consulta_v).df()
+reporte_v.to_csv("reporte_v.csv", index = False)
 
 #%% Tabla provincias cortas
 
@@ -574,7 +589,7 @@ consulta_totales = """
                             THEN 'CABA'
                         ELSE "Provincia"
                         END
-                ORDER BY "Provincia", "Año del censo";
+                ORDER BY "Total habitantes" DESC,"Provincia", "Año del censo";
             """
 
 totales = dd.query(consulta_totales).df()
@@ -587,8 +602,8 @@ df_2022 = totales[totales["Año del censo"] == 2022]
 
 # Definimos la posición de las barras en el eje x y extreamos los valores de población total.
 x = np.arange(len(df_2010))
-A_2010 = df_2010["Total habitantes"]
-A_2022 = df_2022["Total habitantes"]
+A_2010 = df_2010["Total habitantes"] / 1000000
+A_2022 = df_2022["Total habitantes"] / 1000000
 
 # Definimos el ancho de las barras, desplazadas para que queden una al lado de la otra.
 width = 0.4
@@ -598,7 +613,7 @@ ax.bar(x + width/2, A_2022, width=width, label='Año 2022', color = '#9ecae1')
 # Agregamos títulos, etiquetas y rotamos los nombres de las provincias para que se lean bien.
 ax.set_title('Cantidad de habitantes por provincia')
 ax.set_xlabel('Provincias')
-ax.set_ylabel('Habitantes')
+ax.set_ylabel('Cantidad de Habitantes (en millones)')
 ax.set_xticks(x)
 
 # Ajustamos las provincias en eje x.
@@ -608,73 +623,7 @@ ax.legend()
 fig.savefig('Cantidad de habitantes por provincia.png',bbox_inches = 'tight')
 plt.show()
 
-#%% GRAFICO ii versión 1
-
-defunciones_por_anio = """
-                SELECT Descripción, Año, SUM(cantidad) AS Cantidad
-                FROM df_defunciones
-                GROUP BY Año, Descripción
-                ORDER BY Descripción, Año;
-            """
-
-dpa = dd.query(defunciones_por_anio).df()
-
-# Primero identificamos las 10 categorías con mayor cantidad de muertes totales.
-
-# Agrupa por descripcion y suma las cantidades.
-agrupar = dpa.groupby('Descripción')['Cantidad'].sum()
-
-# Ordena de mayor a menor.
-ordenado = agrupar.sort_values(ascending=False)
-
-# Toma los primeros 10.
-primeros_10 = ordenado.head(10)
-
-# Pasamos los primeros 10 a una lista.
-diez_mayores_categorias = primeros_10.index.tolist()
-
-
-# Segundo separamos en dos: las 10 primeras y el resto
-df_10_primeras = dpa[dpa['Descripción'].isin(diez_mayores_categorias)]
-df_otras = dpa[~dpa['Descripción'].isin(diez_mayores_categorias)]
-
-# Tercero agrupamos "las otras causas" por año para tener solo una línea de "Otras causas".
-otras_agrupadas = df_otras.groupby('Año')['Cantidad'].sum().reset_index()
-otras_agrupadas['Descripción'] = 'Otras causas'
-
-fig, ax = plt.subplots()
-
-# Graficamos cada una de las 10 principales
-for categoria in diez_mayores_categorias:
-    subset = df_10_primeras[df_10_primeras['Descripción'] == categoria]
-    ax.plot(subset['Año'], subset['Cantidad'], marker='o', label=categoria)
-
-# Graficamos la línea "otras" con diferente estilo para diferenciar.
-ax.plot(otras_agrupadas['Año'], otras_agrupadas['Cantidad'], 
-        marker='s', linestyle='--', color='gray', label='Otras categorías')
-
-ax.set_title('Defunciones por categoría')
-ax.set_xlabel('Año')
-ax.set_ylabel('Cantidad de defunciones')
-
-# Como los años son muy largos y quedarian amontonados, optamos por tomar los ultimos dos dígitos.
-
-# Lista de años del 2005 al 2022 inclusive
-anios_completos = list(range(2005, 2023))
-
-# Nos salteamos los primeros dos digitos del año
-anios_cortos = [str(anio)[2:] for anio in anios_completos]
-
-ax.set_xticks(anios_completos)
-ax.set_xticklabels(anios_cortos)
-
-ax.legend(title="Categorías", bbox_to_anchor=(1.05, 1), loc='upper left')
-
-plt.tight_layout()
-fig.savefig('Defunciones por categoríavs1.png',bbox_inches = 'tight')
-plt.show()
-
-#%% GRAFICO ii versión 2
+#%% GRAFICO ii
 
 defunciones_por_anio = """
                 SELECT Descripción, Año, SUM(cantidad) AS Cantidad
@@ -732,7 +681,7 @@ for categoria in resto_categorias:
     ax2.plot(subset['Año'], subset['Cantidad'], marker='.', linewidth=1.5, label=categoria)
 
 ax2.set_title('Defunciones por categoria secundarias', fontsize=14, fontweight='bold')
-ax2.set_ylabel('Cantidad de defunciones')
+ax2.set_ylabel('Cantidad de defunciones totales')
 ax2.set_xlabel('Año')
 ax2.set_xticks(anios_completos)
 ax2.set_xticklabels(anios_cortos)
@@ -770,13 +719,13 @@ consulta_tasa_total = """
                 ORDER BY tasa_mortalidad_total ASC;
             """
 
-# Consulta por edad.
-consulta_edades = """
-                WITH muertes_prov_edad AS -- defuncioens en 2022 separadas x prov y grupo et
-                    (SELECT "Provincia ID", "Grupo etario", SUM(Cantidad) AS muertes
+# 2. Consulta por SEXO (Modificada)
+consulta_sexo = """
+                WITH muertes_prov_sexo AS 
+                    (SELECT "Provincia ID", "Sexo", SUM(Cantidad) AS muertes
                     FROM df_defunciones
                     WHERE año = 2022
-                    GROUP BY "Provincia ID", "Grupo etario"),
+                    GROUP BY "Provincia ID", "Sexo"),
                     
                 poblacion_prov AS
                      (SELECT "Provincia ID", SUM(Cantidad) AS poblacion
@@ -784,9 +733,9 @@ consulta_edades = """
                      WHERE "Año del censo" = 2022
                      GROUP BY "Provincia ID")
                     
-                SELECT m."Grupo etario", (m.muertes * 1000.0 / pbl.poblacion) AS tasa_mortalidad,
+                SELECT m."Sexo", (m.muertes * 1000.0 / pbl.poblacion) AS tasa_mortalidad,
                        p."Nombre" AS provincia
-                FROM muertes_prov_edad AS m
+                FROM muertes_prov_sexo AS m
                 JOIN poblacion_prov AS pbl
                     ON m."Provincia ID" = pbl."Provincia ID"
                 JOIN df_provincias_copia AS p
@@ -794,7 +743,7 @@ consulta_edades = """
             """
 
 df_tasa_total = dd.query(consulta_tasa_total).df() # Tasa de mortalidad total
-df_edades = dd.query(consulta_edades).df() # Tasa de mortalidad total separada por edades
+df_sexo = dd.query(consulta_sexo).df() # Tasa de mortalidad total separada por edades
 
 # Grafico con 2 subplots.
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 8))
@@ -804,46 +753,41 @@ fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 8))
 provincias = df_tasa_total["provincia"].tolist()
 tasas = df_tasa_total["tasa_mortalidad_total"].tolist()
 
-ax1.bar(provincias, tasas, color='steelblue', edgecolor='black', alpha=0.8)
+ax1.bar(provincias, tasas, color='#799DE0', edgecolor='black', alpha=0.8)
 ax1.set_title('Mortalidad total por Provincia', fontsize=14, fontweight='bold')
 ax1.set_ylabel('Muertes cada 1000 habitantes')
 ax1.set_xticklabels(provincias, rotation=60, ha='right')
 
 # Gráfico 2
-# Definimos los grupos etarios ordenados.
-grupos_etarios = ['0-14', '15-34', '35-54', '55-74', '75+']
-piso = np.zeros(len(provincias))
-# Esto sirve para que no se sobrepongan las barras por sobre la otra,
-# que cada una empiece por arriba del rango etario anterior.
+categorias_sexo = sorted(df_sexo["Sexo"].unique())
+x = np.arange(len(provincias))
 
-# Iteramos por cada grupo etario.
-for grupo in grupos_etarios:
+width = 0.4
+colores_sexo = ['#A069FF', '#69FF98'] 
 
-    valores_grupo = []
+for i, sexo in enumerate(categorias_sexo):
+    valores_sexo = []
     for p in provincias:
-        # Buscamos el valor en el df para esa provincia y ese grupo.
-        dato = df_edades[(df_edades['provincia'] == p) & (df_edades['Grupo etario'] == grupo)]
-        
-        if not dato.empty:
-            valores_grupo.append(dato['tasa_mortalidad'].values[0])
-        else:
-            valores_grupo.append(0)
+        dato = df_sexo[(df_sexo['provincia'] == p) & (df_sexo['Sexo'] == sexo)]
+        valores_sexo.append(dato['tasa_mortalidad'].values[0])
     
-    # Convertimos la lista a un array con numpy para poder sumar mas facil.
-    valores_array = np.array(valores_grupo)
+    # Calculamos el desplazamiento
+    desplazamiento = (i - (len(categorias_sexo) - 1) / 2) * width
     
-    ax2.bar(provincias, valores_array, bottom=piso, label=grupo, edgecolor='white', linewidth=0.5)
-    
-    # Actualizamos el piso.
-    piso += valores_array
+    ax2.bar(x + desplazamiento, valores_sexo, width=width, label=sexo, 
+            color=colores_sexo[i % len(colores_sexo)], edgecolor='black', alpha=0.9)
 
-ax2.set_title('Mortalidad total por provincia y grupo etario', fontsize=14, fontweight='bold')
-ax2.set_ylabel('Mortalidad por edad')
+# Forzamos a que el eje Y de ax2 sea idéntico al de ax1
+ax2.set_ylim(ax1.get_ylim()) 
+
+ax2.set_title('Mortalidad por Provincia y Sexo', fontsize=14, fontweight='bold')
+ax2.set_ylabel('Muertes cada 1000 habitantes')
+ax2.set_xticks(x)
 ax2.set_xticklabels(provincias, rotation=60, ha='right')
+ax2.legend(title="Sexo")
 
 plt.tight_layout()
-
-fig.savefig('Mortalidad total por provincia y grupo etario.png',bbox_inches = 'tight')
+fig.savefig('Mortalidad_escala_comparativa.png', bbox_inches='tight')
 plt.show()
 
 #%% GRAFICO iv
@@ -936,7 +880,7 @@ ax.set_xlabel('Grupo Etario')
 ax.set_xticks(x)
 ax.set_xticklabels(labels)
 # Nombramos el eje Y.
-ax.set_ylabel('Defunciones cada 100000 habitantes \n del mismo grupo etario')
+ax.set_ylabel('Defunciones cada 100000 habitantes')
 # Mostramos la leyenda para distinguir cada sexo.
 ax.legend()
 fig.savefig('Defunciones por Grupo Etario y Sexo normalizadas.png',bbox_inches = 'tight')
@@ -979,7 +923,7 @@ ax.set_xlabel("Provincias")
 ax.set_ylabel("Total establecimientos por departamento")
 
 # Ajustamos las provincias en eje x.
-ax.set_xticklabels(df_provincias_copia["Nombre"], rotation=45, ha="right")
+plt.xticks(rotation=45, ha="right")
 
 fig.savefig('Distribución de establecimientos de salud.png',bbox_inches = 'tight')
 plt.show()
@@ -1054,14 +998,13 @@ x = len(df_consulta_mortalidad_establecimientos)
 # Agregamos el ID de provincia en el scatterplot a través de un for que itera sobre cada punto.
 for i in range(x):
     ax.text(
-        x=df_consulta_mortalidad_establecimientos["Establecimientos"].iloc[i] + 0.1, 
-        y=df_consulta_mortalidad_establecimientos["Defunciones_x_Provincia"].iloc[i], 
-        s=df_consulta_mortalidad_establecimientos["ID"].iloc[i],
-        fontweight='bold',
-        fontsize=4,
-        alpha=0.7
-    )
-
+        df_consulta_mortalidad_establecimientos["Establecimientos"].iloc[i],
+        df_consulta_mortalidad_establecimientos["Defunciones_x_Provincia"].iloc[i],
+        df_consulta_mortalidad_establecimientos["ID"].iloc[i],
+        fontsize=7,
+        ha="left",
+        va="center"
+        )
 # Título y etiquetas de los ejes.
 ax.set_title('Establecimientos de salud por defunciones por provincia en 2022 por cada 100.000 habitantes')
 ax.set_xlabel('Establecimientos normalizados')
