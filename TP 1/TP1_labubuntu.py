@@ -40,7 +40,7 @@ import seaborn as sns
 
 # Carga de archivos.
 
-carpeta = '/home/Estudiante/Descargas/Archivos importantes/TablasOriginales'
+carpeta = r'C:\Users\Delfina\Desktop\EXACTAS\LABO_DATOS\tp1\TablasOriginales'
 # cargar directorio donde se encuentran las tablas originales
 
 censo2010               = pd.read_excel(carpeta + "/censo2010.xlsX", skiprows=14)
@@ -412,7 +412,6 @@ consulta_i = """
             """
 
 reporte_i = dd.query(consulta_i).df()
-reporte_i.to_csv("reporte_i.csv", index = False)
 
 #%% REPORTE ii
 
@@ -447,7 +446,6 @@ consulta_ii = """
 
 
 reporte_ii = dd.query(consulta_ii).df()
-reporte_ii.to_csv("reporte_ii.csv", index = False)
 
 #%% REPORTE iii
 
@@ -488,7 +486,7 @@ consulta_iii = """
             """
 
 reporte_iii = dd.query(consulta_iii).df()
-reporte_iii.to_csv("reporte_iii.csv", index = False)
+
 
 #%% REPORTE iv
 
@@ -532,7 +530,6 @@ consulta_iv = """
 
 
 reporte_iv = dd.query(consulta_iv).df()
-reporte_iv.to_csv("reporte_iv.csv", index = False)
 
 #%% REPORTE v
 
@@ -553,7 +550,6 @@ consulta_v = """
 
 
 reporte_v = dd.query(consulta_v).df()
-reporte_v.to_csv("reporte_v.csv", index = False)
 
 #%% Tabla provincias cortas
 
@@ -689,7 +685,44 @@ ax2.legend(title="Otras causas", bbox_to_anchor=(1.05, 1), loc='upper left', fon
 ax2.grid(True, linestyle=':', alpha=0.6)
 
 plt.tight_layout(rect=[0, 0.03, 1, 0.95])
-fig.savefig('Defunciones por categoríavs2.png',bbox_inches = 'tight')
+fig.savefig('Defunciones por categoría.png',bbox_inches = 'tight')
+plt.show()
+
+#%% GRAFICO II informe
+
+defunciones_por_anio2 = """
+                SELECT Descripción, Año, SUM(cantidad) AS Cantidad
+                FROM df_defunciones
+                GROUP BY Año, Descripción
+                ORDER BY Descripción, Año;
+            """
+
+dpa2 = dd.query(defunciones_por_anio2).df()
+
+fig, ax1 = plt.subplots(figsize=(14, 6)) 
+
+anios_completos = list(range(2005, 2023))
+anios_cortos = [str(anio)[2:] if anio != 2005 else "2005" for anio in anios_completos]
+
+# Graficamos solo el grupo principal
+for categoria in grupo_principal:
+    subset = dpa2[dpa2['Descripción'] == categoria]
+    ax1.plot(subset['Año'], subset['Cantidad'], marker='o', linewidth=2.5, label=categoria)
+
+ax1.set_title('Defunciones por categoría principales', fontsize=16, fontweight='bold')
+ax1.set_ylabel('Cantidad de defunciones', fontsize=12)
+ax1.set_xlabel('Año', fontsize=12)
+
+ax1.set_xticks(anios_completos)
+ax1.set_xticklabels(anios_cortos)
+
+ax1.legend(loc='upper left', bbox_to_anchor=(1, 1), fontsize=11, frameon=True)
+
+ax1.grid(True, linestyle='--', alpha=0.7)
+
+plt.tight_layout()
+
+fig.savefig('defunciones principales.png', bbox_inches='tight', dpi=300)
 plt.show()
 
 #%% GRAFICO iii
@@ -787,7 +820,7 @@ ax2.set_xticklabels(provincias, rotation=60, ha='right')
 ax2.legend(title="Sexo")
 
 plt.tight_layout()
-fig.savefig('Mortalidad_escala_comparativa.png', bbox_inches='tight')
+fig.savefig('Mortalidad escala comparativa.png', bbox_inches='tight')
 plt.show()
 
 #%% GRAFICO iv
